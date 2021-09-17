@@ -14,6 +14,8 @@ public class EightBallScriptOriginal : MonoBehaviour
     public GameObject Magic8Text;
     public Transform CubePositionDetection;
 
+    public AudioSource TextChangeSE;
+
     bool upsideDownFlag = false;
     int randomNum;
     int randomSayingIndex;
@@ -24,8 +26,6 @@ public class EightBallScriptOriginal : MonoBehaviour
     string[] eightBallNeutral = new string[5] {"Reply hazy, try again", "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again"};
     string[] eightBallNegative = new string[5] {"Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"};
 
-    WaitForSeconds waitTime = new WaitForSeconds(5);
-
     // Start is called before the first frame update
     void Start()
     {
@@ -35,26 +35,26 @@ public class EightBallScriptOriginal : MonoBehaviour
 
     void UpdateEightBall()
     {
-         float x = CubePositionDetection.eulerAngles.x;
+        float x = CubePositionDetection.eulerAngles.x;
         float y = CubePositionDetection.eulerAngles.y;
         float z = CubePositionDetection.eulerAngles.z;
         
 
-        Debug.Log("x,y,z: " + x + " " + y + " " + z);
+        // Debug.Log("y " + y);
 
 
-        if(y > 140 && y < 220){
+        if(z > 130 && z < 220){
             randomNum = PickRandomNumber();
             upsideDownFlag = true;
-            Debug.Log("Test3");
+            Debug.Log("Japan Flipped");
         }
 
-        if(y < 80 || y > 330){
-            Debug.Log("Test4");
+        if(z > 330 || z < 30){
+            Debug.Log("Japan Upright");
 
             if(upsideDownFlag == true){
-                Debug.Log("Test5");
-
+                Debug.Log("JAPAN CHANGE TEXT");
+                
                 upsideDownFlag = false;
                 if(randomNum == 1){
                     int randomSayingIndex = Random.Range(0,eightBallPositive.Length-1);
@@ -68,10 +68,12 @@ public class EightBallScriptOriginal : MonoBehaviour
                     assignText = eightBallNegative[randomSayingIndex];
                 }
                 Debug.Log("New Text: " + assignText);
-
+                TextChangeSE.Play();
                 Magic8Text.GetComponent<TextMeshPro>().text = assignText;
             }
         }
 
     }
 }
+
+

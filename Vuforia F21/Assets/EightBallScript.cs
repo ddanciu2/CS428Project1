@@ -14,6 +14,8 @@ public class EightBallScript : MonoBehaviour
     public GameObject Magic8Text;
     public Transform CubePositionDetection;
 
+    public AudioSource TextChangeSE;
+
     bool upsideDownFlag = false;
     int randomNum;
     int randomSayingIndex;
@@ -21,10 +23,8 @@ public class EightBallScript : MonoBehaviour
 
     string[] eightBallPositive = new string[5] {"100% Yes", "Yesss", "Let's Go! Yes!", "No Doubt, answer = yes", "Looking like a yes"};
     
-    string[] eightBallNeutral = new string[3] {"I don't know chief", "No idea", "Repeat the question"};
+    string[] eightBallNeutral = new string[3] {"I don't know boss", "No idea", "Repeat the question"};
     string[] eightBallNegative = new string[4] {"Fat L, answer = no", "Bruh, no way", "No Shot","Sorry fam, but no"};
-
-    WaitForSeconds waitTime = new WaitForSeconds(5);
 
     // Start is called before the first frame update
     void Start()
@@ -35,25 +35,26 @@ public class EightBallScript : MonoBehaviour
 
     void UpdateEightBall()
     {
-         float x = CubePositionDetection.eulerAngles.x;
+        float x = CubePositionDetection.eulerAngles.x;
         float y = CubePositionDetection.eulerAngles.y;
         float z = CubePositionDetection.eulerAngles.z;
         
+        // Debug.Log("z: " + z);
 
-        Debug.Log("x,y,z: " + x + " " + y + " " + z);
 
-
-        if(y > 140 && y < 220){
+        // if(y > 140 && y < 220 || z > 130 && z < 220){
+        if(z > 130 && z < 220){
             randomNum = PickRandomNumber();
             upsideDownFlag = true;
-            Debug.Log("Test3");
+            Debug.Log("AZ Flipped");
         }
 
-        if(y < 80 || y > 330){
-            Debug.Log("Test4");
+        // if(y < 80 || y > 330 || z > 330 || z < 30){
+        if(z > 330 || z < 30){
+            Debug.Log("AZ Upright");
 
             if(upsideDownFlag == true){
-                Debug.Log("Test5");
+                Debug.Log("AZ CHANGE TEXT");
 
                 upsideDownFlag = false;
                 if(randomNum == 1){
@@ -67,8 +68,9 @@ public class EightBallScript : MonoBehaviour
                     int randomSayingIndex = Random.Range(0,eightBallNegative.Length-1);
                     assignText = eightBallNegative[randomSayingIndex];
                 }
-                Debug.Log("New Text: " + assignText);
 
+                Debug.Log("New Text: " + assignText);
+                TextChangeSE.Play();
                 Magic8Text.GetComponent<TextMeshPro>().text = assignText;
             }
         }
